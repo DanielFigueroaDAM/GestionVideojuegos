@@ -27,6 +27,9 @@ class JuegoDialog(Gtk.Dialog):
         if self.juego:
             self._cargar_datos()
 
+        # Conectar señal para validar antes de aceptar
+        self.connect("response", self._on_response)
+
     def _init_ui(self):
         """Construye la interfaz del diálogo con Frames para agrupar."""
         box = self.get_content_area()
@@ -182,3 +185,32 @@ class JuegoDialog(Gtk.Dialog):
             valoracion=valoracion,
             genero=genero
         )
+
+    def _on_response(self, dialog, response_id):
+        """Valida los campos obligatorios antes de aceptar."""
+        if response_id == Gtk.ResponseType.OK:
+            # Validar título
+            titulo = self.entry_titulo.get_text().strip()
+            if not titulo or len(titulo) < 3:
+                self._mostrar_error("El título es obligatorio y debe tener al menos 3 caracteres")
+                self.emit_stop_by_name("response")
+                return
+
+            # Validar género
+            if self.combo_genero.get_active() == -1:
+                self._mostrar_error("Debes seleccionar un género")
+                self.emit_stop_by_name("response")
+                return
+
+    def _mostrar_error(self, mensaje):
+        """Muestra un diálogo de error."""
+        dialog = Gtk.MessageDialog(
+            parent=self,
+            flags=0,
+            message_type=Gtk.MessageType.ERROR,
+            buttons=Gtk.ButtonsType.OK,
+            text="Error de validación"
+        )
+        dialog.format_secondary_text(mensaje)
+        dialog.run()
+        dialog.destroy()
