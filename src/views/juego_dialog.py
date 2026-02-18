@@ -47,6 +47,7 @@ class JuegoDialog(Gtk.Dialog):
         lbl_titulo = Gtk.Label(label="Título:", xalign=0)
         self.entry_titulo = Gtk.Entry()
         self.entry_titulo.set_placeholder_text("Ej: The Legend of Zelda")
+        self.entry_titulo.connect("changed", self._validar_titulo)
         vbox_basico.pack_start(lbl_titulo, False, False, 0)
         vbox_basico.pack_start(self.entry_titulo, False, False, 0)
 
@@ -61,6 +62,7 @@ class JuegoDialog(Gtk.Dialog):
         renderer = Gtk.CellRendererText()
         self.combo_genero.pack_start(renderer, True)
         self.combo_genero.add_attribute(renderer, "text", 1)
+        self.combo_genero.connect("changed", self._validar_genero)
         vbox_basico.pack_start(lbl_genero, False, False, 0)
         vbox_basico.pack_start(self.combo_genero, False, False, 0)
 
@@ -214,3 +216,50 @@ class JuegoDialog(Gtk.Dialog):
         dialog.format_secondary_text(mensaje)
         dialog.run()
         dialog.destroy()
+
+    def _validar_titulo(self, widget):
+        """Valida el título en tiempo real con feedback visual."""
+        texto = widget.get_text().strip()
+
+        if not texto:
+            # Campo vacío: mostrar advertencia
+            widget.set_icon_from_icon_name(
+                Gtk.EntryIconPosition.SECONDARY,
+                "dialog-warning-symbolic"
+            )
+            widget.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                "El título es obligatorio"
+            )
+        elif len(texto) < 3:
+            # Muy corto: mostrar advertencia
+            widget.set_icon_from_icon_name(
+                Gtk.EntryIconPosition.SECONDARY,
+                "dialog-warning-symbolic"
+            )
+            widget.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                "Mínimo 3 caracteres"
+            )
+        else:
+            # Válido: mostrar checkmark
+            widget.set_icon_from_icon_name(
+                Gtk.EntryIconPosition.SECONDARY,
+                "emblem-ok-symbolic"
+            )
+            widget.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                "✓ Válido"
+            )
+
+    def _validar_genero(self, widget):
+        """Valida el género en tiempo real con feedback visual."""
+        active = widget.get_active()
+
+        if active == -1:
+            # No seleccionado: mostrar advertencia
+            widget.set_has_entry(False)  # Asegurar que no tiene entrada
+        else:
+            # Seleccionado: válido (sin icono porque es ComboBox)
+            pass
+

@@ -1,4 +1,11 @@
 # conexionBD.py
+"""
+Módulo de gestión de conexión a la base de datos.
+
+Proporciona la clase ConexionBD que gestiona las conexiones a SQLite
+de forma segura mediante context managers, y asegura la creación de
+tablas y géneros predeterminados.
+"""
 import sqlite3
 import os
 from contextlib import contextmanager
@@ -7,7 +14,12 @@ from contextlib import contextmanager
 class ConexionBD:
     """
     Gestor de conexión a la base de datos SQLite.
-    Proporciona un context manager para manejar las conexiones.
+
+    Proporciona un context manager para manejar las conexiones de forma segura.
+    Automáticamente crea las tablas si no existen y carga géneros predeterminados.
+
+    Attributes:
+        db_path (str): Ruta al archivo de base de datos SQLite.
     """
 
     def __init__(self, db_path="data/juegos.db"):
@@ -23,7 +35,13 @@ class ConexionBD:
         self._crear_tablas()
 
     def _crear_tablas(self):
-        """Crea las tablas si no existen (ejecuta schema.sql)."""
+        """
+        Crea las tablas de la base de datos si no existen.
+
+        Ejecuta el esquema SQL desde el archivo schema.sql que define
+        la estructura de las tablas (generos y juegos). Luego crea los
+        géneros predeterminados si no existen.
+        """
         with self.conectar() as conn:
             cursor = conn.cursor()
             # Ruta relativa desde la carpeta raíz del proyecto
@@ -38,7 +56,12 @@ class ConexionBD:
         self._crear_generos_predeterminados()
 
     def _crear_generos_predeterminados(self):
-        """Crea los géneros predeterminados si no existen."""
+        """
+        Crea los géneros predeterminados si no existen.
+
+        Inserta una lista de géneros comunes (Acción, Aventura, RPG, etc.)
+        en la base de datos. Si un género ya existe, lo ignora silenciosamente.
+        """
         generos_predeterminados = [
             ("Acción", "Juegos enfocados en combate y movimiento rápido"),
             ("Aventura", "Juegos narrativos con exploración y resolución de puzzles"),
@@ -69,10 +92,19 @@ class ConexionBD:
     def conectar(self):
         """
         Context manager que proporciona una conexión a la base de datos.
-        Se encarga de hacer commit o rollback automáticamente y cerrar la conexión.
+
+        Se encarga de hacer commit o rollback automáticamente y cerrar la
+        conexión. Configura la conexión para que las filas se comporten
+        como diccionarios (sqlite3.Row) para facilitar el acceso a los datos.
 
         Yields:
-            sqlite3.Connection: Conexión a la base de datos.
+            sqlite3.Connection: Conexión a la base de datos SQLite.
+
+        Example:
+            with ConexionBD().conectar() as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM juegos")
+                filas = cursor.fetchall()
         """
         conn = sqlite3.connect(self.db_path)
         # Para que las filas se comporten como diccionarios

@@ -13,7 +13,7 @@ import sys
 import os
 
 # Agregar src al path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../src'))
 
 def test_imports():
     """Prueba que todas las importaciones funcionan."""

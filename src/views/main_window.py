@@ -1,4 +1,10 @@
 # views/main_window.py
+"""
+Módulo de la ventana principal de la aplicación.
+
+Este módulo contiene la clase MainWindow que gestiona la interfaz principal
+de la aplicación de colección de videojuegos.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject
@@ -10,8 +16,17 @@ from views.generos_window import GenerosWindow
 class MainWindow(Gtk.Window):
     """
     Ventana principal de la aplicación.
-    Muestra la lista de juegos en un TreeView y proporciona botones para
-    añadir, editar y eliminar juegos, así como para gestionar géneros.
+
+    Muestra la lista de juegos en un TreeView con capacidad de ordenamiento
+    y proporciona botones para añadir, editar y eliminar juegos, así como
+    para gestionar géneros.
+
+    Attributes:
+        store (Gtk.ListStore): Modelo de datos para el TreeView.
+        treeview (Gtk.TreeView): Widget para mostrar la tabla de juegos.
+        selection (Gtk.TreeSelection): Selector de filas.
+        btn_editar (Gtk.Button): Botón para editar juego.
+        btn_eliminar (Gtk.Button): Botón para eliminar juego.
     """
 
     def __init__(self):
@@ -29,7 +44,15 @@ class MainWindow(Gtk.Window):
         self.cargar_juegos()
 
     def _init_ui(self):
-        """Construye la interfaz de la ventana principal."""
+        """
+        Construye la interfaz de la ventana principal.
+
+        Crea la estructura de widgets incluyendo:
+        - Frame de gestión de juegos (botones Nuevo, Editar, Eliminar)
+        - Frame de gestión de géneros
+        - TreeView con scroll para mostrar la lista de juegos
+        - Columnas con renderers de texto
+        """
         # Caja vertical principal
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         self.add(vbox)
@@ -99,7 +122,19 @@ class MainWindow(Gtk.Window):
         self.selection.connect("changed", self.on_selection_changed)
 
     def _crear_columnas(self):
-        """Crea las columnas del TreeView con sus renderers."""
+        """
+        Crea las columnas del TreeView con sus renderers.
+
+        Se crean las siguientes columnas ordenables:
+        - Título: nombre del juego
+        - Plataforma: consola o sistema donde se juega
+        - Desarrollador: estudio que lo desarrolló
+        - Fecha: mes y año en que se jugó
+        - Valoración: puntuación del 1 al 10
+        - Género: tipo de juego (Acción, RPG, etc.)
+
+        Todas las columnas son ordenables haciendo clic en el encabezado.
+        """
         # Columna Título
         renderer = Gtk.CellRendererText()
         columna = Gtk.TreeViewColumn("Título", renderer, text=1)
@@ -137,7 +172,14 @@ class MainWindow(Gtk.Window):
         self.treeview.append_column(columna)
 
     def cargar_juegos(self):
-        """Carga los juegos desde la base de datos y llena el ListStore."""
+        """
+        Carga los juegos desde la base de datos y llena el ListStore.
+
+        Limpia el modelo existente y obtiene todos los juegos de la BD,
+        formateando la información para mostrarla en el TreeView.
+        La fecha se formatea como mes/año si ambos están disponibles.
+        El nombre del género se obtiene del objeto Genero asociado.
+        """
         self.store.clear()
         juegos = Juego.get_all()
         for juego in juegos:
@@ -148,14 +190,32 @@ class MainWindow(Gtk.Window):
                                genero_nombre])
 
     def on_selection_changed(self, selection):
-        """Habilita/deshabilita botones según haya selección."""
+        """
+        Habilita/deshabilita botones según haya selección.
+
+        Cuando el usuario selecciona una fila en el TreeView, se habilitan
+        los botones "Editar" y "Eliminar". Cuando deselecciona, se desactivan.
+
+        Args:
+            selection (Gtk.TreeSelection): El objeto de selección del TreeView.
+        """
         sel = selection.get_selected()
         hay_seleccion = sel[1] is not None if sel else False
         self.btn_editar.set_sensitive(hay_seleccion)
         self.btn_eliminar.set_sensitive(hay_seleccion)
 
     def on_nuevo_clicked(self, widget):
-        """Abre el diálogo para crear un nuevo juego."""
+        """
+        Abre el diálogo para crear un nuevo juego.
+
+        Muestra un JuegoDialog vacío (sin datos previos). Si el usuario
+        acepta, se obtienen los datos del diálogo, se guarda el nuevo juego
+        en la BD y se recarga la lista de juegos. Muestra un mensaje de éxito
+        o error según el resultado.
+
+        Args:
+            widget (Gtk.Widget): El botón que activó esta acción.
+        """
         dialog = JuegoDialog(self)
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
@@ -169,7 +229,16 @@ class MainWindow(Gtk.Window):
         dialog.destroy()
 
     def on_editar_clicked(self, widget):
-        """Abre el diálogo para editar el juego seleccionado."""
+        """
+        Abre el diálogo para editar el juego seleccionado.
+
+        Obtiene el ID del juego seleccionado en el TreeView, lo carga de la BD,
+        lo pasa al diálogo que lo rellena con sus datos actuales. Si el usuario
+        acepta, se actualiza el juego en la BD y se recarga la lista.
+
+        Args:
+            widget (Gtk.Widget): El botón que activó esta acción.
+        """
         selection = self.selection.get_selected()
         if selection:
             model, treeiter = selection
@@ -190,7 +259,15 @@ class MainWindow(Gtk.Window):
                 dialog.destroy()
 
     def on_eliminar_clicked(self, widget):
-        """Elimina el juego seleccionado tras confirmación."""
+        """
+        Elimina el juego seleccionado tras confirmación.
+
+        Muestra un diálogo de confirmación antes de eliminar. Si el usuario
+        confirma (botón SÍ), se elimina el juego de la BD y se recarga la lista.
+
+        Args:
+            widget (Gtk.Widget): El botón que activó esta acción.
+        """
         selection = self.selection.get_selected()
         if selection:
             model, treeiter = selection
@@ -216,17 +293,41 @@ class MainWindow(Gtk.Window):
                 dialog.destroy()
 
     def on_generos_clicked(self, widget):
-        """Abre la ventana de gestión de géneros."""
+        """
+        Abre la ventana de gestión de géneros.
+
+        Crea una nueva ventana GenerosWindow modal que permite al usuario
+        crear, editar y eliminar géneros. La ventana se cierra cuando el
+        usuario termina de gestionar géneros.
+
+        Args:
+            widget (Gtk.Widget): El botón que activó esta acción.
+        """
         generos_window = GenerosWindow(self)
         generos_window.show_all()
         generos_window.connect("destroy", self.on_generos_window_closed)
 
     def on_generos_window_closed(self, widget):
-        """Recarga los géneros cuando se cierra la ventana de gestión."""
+        """
+        Recarga los géneros cuando se cierra la ventana de gestión.
+
+        Se ejecuta cuando el usuario cierra GenerosWindow para asegurar
+        que los cambios realizados en géneros se reflejan en los juegos.
+
+        Args:
+            widget (Gtk.Widget): La ventana que se cerró.
+        """
         self.cargar_juegos()
 
     def _mostrar_mensaje(self, titulo, mensaje, tipo):
-        """Muestra un diálogo de mensaje."""
+        """
+        Muestra un diálogo de mensaje al usuario.
+
+        Args:
+            titulo (str): Título del diálogo.
+            mensaje (str): Mensaje a mostrar como texto secundario.
+            tipo (Gtk.MessageType): Tipo de mensaje (INFO, WARNING, ERROR).
+        """
         dialog = Gtk.MessageDialog(
             parent=self,
             flags=0,

@@ -1,4 +1,10 @@
 # views/genero_dialog.py
+"""
+Módulo del diálogo de géneros.
+
+Este módulo contiene la clase GeneroDialog que permite crear o editar
+géneros de videojuegos mediante un formulario modal.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -9,6 +15,15 @@ from models import Genero
 class GeneroDialog(Gtk.Dialog):
     """
     Diálogo para crear o editar un género.
+
+    Proporciona un formulario modal con campos para nombre (obligatorio)
+    y descripción (opcional). Incluye validación en tiempo real con
+    feedback visual mediante iconos.
+
+    Attributes:
+        genero (Genero or None): Género que se está editando (None si es nuevo).
+        entry_nombre (Gtk.Entry): Campo de entrada para el nombre del género.
+        text_descripcion (Gtk.TextView): Área de texto para la descripción.
     """
 
     def __init__(self, parent, genero=None):
@@ -31,7 +46,14 @@ class GeneroDialog(Gtk.Dialog):
         self.connect("response", self._on_response)
 
     def _init_ui(self):
-        """Construye la interfaz del diálogo con Frames."""
+        """
+        Construye la interfaz del diálogo con Frames.
+
+        Crea un formulario con los siguientes elementos:
+        - Frame: Información del Género
+          - Campo Nombre (obligatorio, con validación en tiempo real)
+          - Área Descripción (opcional, con scroll)
+        """
         box = self.get_content_area()
         box.set_spacing(12)
 
@@ -47,6 +69,7 @@ class GeneroDialog(Gtk.Dialog):
         lbl_nombre = Gtk.Label(label="Nombre:", xalign=0)
         self.entry_nombre = Gtk.Entry()
         self.entry_nombre.set_placeholder_text("Ej: Acción")
+        self.entry_nombre.connect("changed", self._validar_nombre)
         vbox_genero.pack_start(lbl_nombre, False, False, 0)
         vbox_genero.pack_start(self.entry_nombre, False, False, 0)
 
@@ -64,21 +87,25 @@ class GeneroDialog(Gtk.Dialog):
         frame_genero.add(vbox_genero)
         box.pack_start(frame_genero, True, True, 0)
 
-
         # Mostrar todo
         self.show_all()
 
     def _cargar_datos(self):
-        """Rellena los campos con los datos del género que se está editando."""
+        """
+        Rellena los campos con los datos del género que se está editando.
+
+        Se ejecuta solo si se está editando un género existente.
+        """
         self.entry_nombre.set_text(self.genero.nombre)
         if self.genero.descripcion:
             self.text_descripcion.get_buffer().set_text(self.genero.descripcion)
 
-
     def crear_genero_desde_dialogo(self):
         """
         Crea un objeto Genero a partir de los valores actuales del diálogo.
-        Útil para guardar después.
+
+        Returns:
+            Genero: Un nuevo objeto Genero con los datos del formulario.
         """
         nombre = self.entry_nombre.get_text()
         buffer = self.text_descripcion.get_buffer()
@@ -90,7 +117,17 @@ class GeneroDialog(Gtk.Dialog):
         )
 
     def _on_response(self, dialog, response_id):
-        """Valida los campos obligatorios antes de aceptar."""
+        """
+        Valida los campos obligatorios antes de aceptar el diálogo.
+
+        Verifica que el nombre sea válido (al menos 3 caracteres) antes
+        de permitir cerrar el diálogo. Si hay error, muestra un diálogo
+        de error y cancela el cierre.
+
+        Args:
+            dialog (Gtk.Dialog): El diálogo que emitió la señal.
+            response_id (Gtk.ResponseType): ID de la respuesta del usuario.
+        """
         if response_id == Gtk.ResponseType.OK:
             # Validar nombre
             nombre = self.entry_nombre.get_text().strip()
@@ -100,7 +137,12 @@ class GeneroDialog(Gtk.Dialog):
                 return
 
     def _mostrar_error(self, mensaje):
-        """Muestra un diálogo de error."""
+        """
+        Muestra un diálogo de error.
+
+        Args:
+            mensaje (str): Mensaje de error a mostrar.
+        """
         dialog = Gtk.MessageDialog(
             parent=self,
             flags=0,
@@ -111,4 +153,49 @@ class GeneroDialog(Gtk.Dialog):
         dialog.format_secondary_text(mensaje)
         dialog.run()
         dialog.destroy()
+
+    def _validar_nombre(self, widget):
+        """
+        Valida el nombre en tiempo real con feedback visual.
+
+        Muestra iconos en el campo según el estado:
+        - Vacío: icono de advertencia
+        - < 3 caracteres: icono de advertencia
+        - Válido: icono de checkmark
+
+        Args:
+            widget (Gtk.Entry): Campo de entrada del nombre.
+        """
+        texto = widget.get_text().strip()
+
+        if not texto:
+            # Campo vacío: mostrar advertencia
+            widget.set_icon_from_icon_name(
+                Gtk.EntryIconPosition.SECONDARY,
+                "dialog-warning-symbolic"
+            )
+            widget.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                "El nombre es obligatorio"
+            )
+        elif len(texto) < 3:
+            # Muy corto: mostrar advertencia
+            widget.set_icon_from_icon_name(
+                Gtk.EntryIconPosition.SECONDARY,
+                "dialog-warning-symbolic"
+            )
+            widget.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                "Mínimo 3 caracteres"
+            )
+        else:
+            # Válido: mostrar checkmark
+            widget.set_icon_from_icon_name(
+                Gtk.EntryIconPosition.SECONDARY,
+                "emblem-ok-symbolic"
+            )
+            widget.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                "✓ Válido"
+            )
 

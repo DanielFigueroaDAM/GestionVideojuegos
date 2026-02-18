@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Colección de Videojuegos - Documentación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #764ba2;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .link-card {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .link-card:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .link-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .link-card p {
+            font-size: 0.95em;
+            opacity: 0.8;
+        }
+
+        .link-card:hover p {
+            opacity: 1;
+        }
+
+        .emoji {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .footer {
+            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
+            padding-top: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+        }
+
+        .btn-secondary {
+            background: #764ba2;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+        }
+
+        .alert {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .alert strong {
+            color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Gestor de Colección de Videojuegos</h1>
+        <p class="subtitle">Documentación Completa del Proyecto</p>
+
+        <!-- Acceso Rápido -->
+        <div class="section">
+            <h2>📚 Acceso a la Documentación</h2>
+            <div class="links">
+                <a href="docs/_build/html/index.html" class="link-card">
+                    <h3>📖 Documentación Web</h3>
+                    <p>Accede a la documentación completa generada con Sphinx. Incluye guías, tutoriales y referencia de API.</p>
+                </a>
+
+                <a href="docs/_build/html/introduccion.html" class="link-card">
+                    <h3>🚀 Introducción</h3>
+                    <p>Conoce las características principales, requisitos y arquitectura de la aplicación.</p>
+                </a>
+
+                <a href="docs/_build/html/instalacion.html" class="link-card">
+                    <h3>💻 Instalación</h3>
+                    <p>Guías paso a paso para instalar en Linux, Windows y macOS.</p>
+                </a>
+
+                <a href="docs/_build/html/uso.html" class="link-card">
+                    <h3>🎯 Manual de Uso</h3>
+                    <p>Aprende a usar todas las características de la aplicación con ejemplos prácticos.</p>
+                </a>
+
+                <a href="docs/_build/html/arquitectura.html" class="link-card">
+                    <h3>🏗️ Arquitectura</h3>
+                    <p>Documentación técnica de la arquitectura, patrones de diseño y estructura del código.</p>
+                </a>
+
+                <a href="docs/_build/html/py-modindex.html" class="link-card">
+                    <h3>📚 Referencia de API</h3>
+                    <p>Documentación automática de todas las clases y métodos del proyecto.</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Características -->
+        <div class="section">
+            <h2>✨ Características del Proyecto</h2>
+            <ul class="feature-list">
+                <li>Gestión completa de colecciones de videojuegos</li>
+                <li>Interfaz gráfica moderna con GTK 3.0</li>
+                <li>Base de datos SQLite local y segura</li>
+                <li>Crear, editar y eliminar juegos</li>
+                <li>Gestión flexible de géneros</li>
+                <li>Validación en tiempo real con feedback visual</li>
+                <li>Ordenamiento y filtrado de registros</li>
+                <li>Géneros predeterminados incluidos</li>
+            </ul>
+        </div>
+
+        <!-- Documentación Generada -->
+        <div class="section">
+            <h2>📝 Documentación Generada</h2>
+
+            <h3>Comentarios de Código (Docstrings)</h3>
+            <ul class="feature-list">
+                <li>7 módulos completamente documentados</li>
+                <li>50+ métodos y funciones con docstrings</li>
+                <li>Parámetros y valores de retorno documentados</li>
+                <li>Ejemplos de uso en métodos principales</li>
+            </ul>
+
+            <h3>Páginas de Documentación</h3>
+            <ul class="feature-list">
+                <li>Introducción y descripción del proyecto</li>
+                <li>Guías de instalación para 3 sistemas operativos</li>
+                <li>Manual de usuario paso a paso</li>
+                <li>Documentación técnica y arquitectura</li>
+                <li>Referencia automática de API</li>
+            </ul>
+
+            <h3>Página Web Sphinx</h3>
+            <ul class="feature-list">
+                <li>Tema profesional Read the Docs</li>
+                <li>Sistema de búsqueda integrado</li>
+                <li>Navegación jerárquica automática</li>
+                <li>Enlaces a código fuente</li>
+                <li>Responsive design (funciona en móvil)</li>
+            </ul>
+        </div>
+
+        <!-- Inicio Rápido -->
+        <div class="section">
+            <h2>⚡ Inicio Rápido</h2>
+
+            <h3>Instalación</h3>
+            <div class="code-block">
+# Linux/macOS
+sudo apt-get install python3 python3-gi gir1.2-gtk-3.0
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 src/main.py
+
+# Windows
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python src/main.py
+            </div>
+
+            <h3>Generar Documentación</h3>
+            <div class="code-block">
+cd docs
+make html
+# Luego abre: _build/html/index.html
+            </div>
+        </div>
+
+        <!-- Información -->
+        <div class="alert">
+            <strong>📌 Nota Importante:</strong> La documentación está completamente generada y lista para usar.
+            Todos los docstrings están en el código fuente, y la documentación web se genera automáticamente con Sphinx
+            cuando ejecutas <code>make html</code> en la carpeta <code>docs/</code>.
+        </div>
+
+        <!-- Archivos del Proyecto -->
+        <div class="section">
+            <h2>📁 Archivos Principales</h2>
+            <div class="code-block">
+GestionVideojuegos/
+├── src/
+│   ├── main.py              # Punto de entrada
+│   ├── models.py            # Clases Juego y Genero
+│   ├── conexionBD.py        # Gestión de base de datos
+│   └── views/               # Componentes de interfaz
+│       ├── main_window.py
+│       ├── juego_dialog.py
+│       ├── genero_dialog.py
+│       └── generos_window.py
+├── data/
+│   ├── schema.sql           # Esquema de BD
+│   └── juegos.db            # Base de datos
+├── docs/
+│   ├── _build/html/         # Documentación web (AQUÍ)
+│   ├── conf.py              # Configuración Sphinx
+│   └── *.rst                # Archivos de documentación
+├── README.md                # Información del proyecto
+└── requirements.txt         # Dependencias
+            </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="button-group">
+            <a href="docs/_build/html/index.html" class="btn">📖 Ver Documentación Web</a>
+            <a href="https://github.com" class="btn btn-secondary">🔗 GitHub (opcional)</a>
+        </div>
+
+        <div class="footer">
+            <p>Gestor de Colección de Videojuegos | Documentación generada con Sphinx</p>
+            <p>Última actualización: 18 de Febrero de 2026</p>
+        </div>
+    </div>
+</body>
+</html>
