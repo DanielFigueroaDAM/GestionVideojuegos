@@ -20,6 +20,10 @@ class JuegoDialog(Gtk.Dialog):
         self.set_border_width(10)
         self.juego = juego
 
+        # Variables para almacenar los modelos de autocompletado
+        self.plataformas_model = None
+        self.desarrolladores_model = None
+
         # Crear los widgets
         self._init_ui()
 
@@ -29,6 +33,9 @@ class JuegoDialog(Gtk.Dialog):
 
         # Conectar señal para validar antes de aceptar
         self.connect("response", self._on_response)
+
+        # Recargar sugerencias dinámicamente cuando se muestra el diálogo
+        self.connect("show", self._on_show)
 
     def _init_ui(self):
         """Construye la interfaz del diálogo con Frames para agrupar."""
@@ -77,17 +84,35 @@ class JuegoDialog(Gtk.Dialog):
         vbox_editorial.set_margin_start(10)
         vbox_editorial.set_margin_end(10)
 
-        # Plataforma
+        # Plataforma con autocompletado
         lbl_plataforma = Gtk.Label(label="Plataforma:", xalign=0)
         self.entry_plataforma = Gtk.Entry()
         self.entry_plataforma.set_placeholder_text("Ej: PlayStation 5")
+        # Crear modelo con plataformas sugeridas para autocompletado
+        self.plataformas_model = Gtk.ListStore(str)
+        self._cargar_plataformas_sugeridas(self.plataformas_model)
+        completion_plataforma = Gtk.EntryCompletion()
+        completion_plataforma.set_model(self.plataformas_model)
+        completion_plataforma.set_text_column(0)
+        completion_plataforma.set_inline_completion(True)
+        completion_plataforma.set_popup_completion(True)
+        self.entry_plataforma.set_completion(completion_plataforma)
         vbox_editorial.pack_start(lbl_plataforma, False, False, 0)
         vbox_editorial.pack_start(self.entry_plataforma, False, False, 0)
 
-        # Desarrollador
+        # Desarrollador con autocompletado
         lbl_desarrollador = Gtk.Label(label="Desarrollador:", xalign=0)
         self.entry_desarrollador = Gtk.Entry()
         self.entry_desarrollador.set_placeholder_text("Ej: Nintendo")
+        # Crear modelo con desarrolladores sugeridos para autocompletado
+        self.desarrolladores_model = Gtk.ListStore(str)
+        self._cargar_desarrolladores_sugeridos(self.desarrolladores_model)
+        completion_desarrollador = Gtk.EntryCompletion()
+        completion_desarrollador.set_model(self.desarrolladores_model)
+        completion_desarrollador.set_text_column(0)
+        completion_desarrollador.set_inline_completion(True)
+        completion_desarrollador.set_popup_completion(True)
+        self.entry_desarrollador.set_completion(completion_desarrollador)
         vbox_editorial.pack_start(lbl_desarrollador, False, False, 0)
         vbox_editorial.pack_start(self.entry_desarrollador, False, False, 0)
 
@@ -137,6 +162,42 @@ class JuegoDialog(Gtk.Dialog):
 
         # Mostrar todo
         self.show_all()
+
+    def _on_show(self, widget):
+        """
+        Se llama cuando el diálogo se muestra.
+        Recarga dinámicamente las sugerencias desde el JSON.
+        """
+        try:
+            # Limpiar modelos anteriores
+            self.plataformas_model.clear()
+            self.desarrolladores_model.clear()
+            # Recargar con datos frescos
+            self._cargar_plataformas_sugeridas(self.plataformas_model)
+            self._cargar_desarrolladores_sugeridos(self.desarrolladores_model)
+        except Exception:
+            # Si hay error, simplemente no hace nada
+            pass
+
+    def _cargar_plataformas_sugeridas(self, model):
+        """Carga las plataformas anteriormente usadas en el modelo de autocompletado."""
+        try:
+            plataformas = Juego.get_plataformas_unicas()
+            for plataforma in plataformas:
+                model.append([plataforma])
+        except Exception:
+            # Si hay error, simplemente no carga sugerencias
+            pass
+
+    def _cargar_desarrolladores_sugeridos(self, model):
+        """Carga los desarrolladores anteriormente usados en el modelo de autocompletado."""
+        try:
+            desarrolladores = Juego.get_desarrolladores_unicos()
+            for desarrollador in desarrolladores:
+                model.append([desarrollador])
+        except Exception:
+            # Si hay error, simplemente no carga sugerencias
+            pass
 
     def _cargar_datos(self):
         """Rellena los campos con los datos del juego que se está editando."""

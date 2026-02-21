@@ -4,6 +4,8 @@ Define las clases Genero y Juego con los campos básicos y métodos CRUD.
 """
 
 from conexionBD import ConexionBD
+import json
+import os
 
 
 class Genero:
@@ -236,6 +238,46 @@ class Juego:
             cursor.execute('DELETE FROM juegos WHERE id = ?', (self.id,))
             self.id = None
             return True
+
+    @classmethod
+    def get_plataformas_unicas(cls):
+        """
+        Obtiene una lista de plataformas únicas desde el archivo JSON de estadísticas.
+        Mucho más rápido que consultar SQLite.
+
+        Returns:
+            list[str]: Lista de plataformas únicas ordenadas.
+        """
+        try:
+            json_path = os.path.join(os.path.dirname(__file__), "data/estadisticas.json")
+            if os.path.exists(json_path):
+                with open(json_path, 'r', encoding='utf-8') as f:
+                    datos = json.load(f)
+                    plataformas = list(datos.get("plataformas", {}).keys())
+                    return sorted(plataformas)
+        except Exception:
+            pass
+        return []
+
+    @classmethod
+    def get_desarrolladores_unicos(cls):
+        """
+        Obtiene una lista de desarrolladores únicos desde el archivo JSON de estadísticas.
+        Mucho más rápido que consultar SQLite.
+
+        Returns:
+            list[str]: Lista de desarrolladores únicos ordenados.
+        """
+        try:
+            json_path = os.path.join(os.path.dirname(__file__), "data/estadisticas.json")
+            if os.path.exists(json_path):
+                with open(json_path, 'r', encoding='utf-8') as f:
+                    datos = json.load(f)
+                    desarrolladores = list(datos.get("desarrolladores", {}).keys())
+                    return sorted(desarrolladores)
+        except Exception:
+            pass
+        return []
 
     def __repr__(self):
         genero_str = f' [{self.genero.nombre}]' if self.genero else ''

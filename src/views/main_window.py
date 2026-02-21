@@ -13,6 +13,7 @@ from models import Juego, Genero
 from views.juego_dialog import JuegoDialog
 from views.generos_window import GenerosWindow
 from views.estadisticas_window import EstadisticasWindow
+from utils.toJson import GestorJSON
 
 class MainWindow(Gtk.Window):
     """
@@ -242,6 +243,9 @@ class MainWindow(Gtk.Window):
             try:
                 juego = dialog.crear_juego_desde_dialogo()
                 juego.save()
+                # Actualizar estadísticas en JSON para refrescar las sugerencias
+                gestor = GestorJSON()
+                gestor.guardar_estadisticas_completas()
                 self.cargar_juegos()
                 self._mostrar_mensaje("Éxito", f"Juego '{juego.titulo}' guardado correctamente", Gtk.MessageType.INFO)
             except Exception as e:
@@ -272,6 +276,9 @@ class MainWindow(Gtk.Window):
                         juego_actualizado = dialog.crear_juego_desde_dialogo()
                         juego_actualizado.id = juego_id
                         juego_actualizado.save()
+                        # Actualizar estadísticas en JSON para refrescar las sugerencias
+                        gestor = GestorJSON()
+                        gestor.guardar_estadisticas_completas()
                         self.cargar_juegos()
                         self._mostrar_mensaje("Éxito", f"Juego '{juego_actualizado.titulo}' actualizado", Gtk.MessageType.INFO)
                     except Exception as e:
