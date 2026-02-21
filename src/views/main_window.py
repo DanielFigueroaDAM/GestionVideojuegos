@@ -12,6 +12,7 @@ from gi.repository import Gtk, GObject
 from models import Juego, Genero
 from views.juego_dialog import JuegoDialog
 from views.generos_window import GenerosWindow
+from views.estadisticas_window import EstadisticasWindow
 
 class MainWindow(Gtk.Window):
     """
@@ -105,6 +106,25 @@ class MainWindow(Gtk.Window):
 
         frame_generos.add(hbox_generos)
         toolbar.pack_start(frame_generos, False, False, 0)
+
+        # Separador
+        separator2 = Gtk.Separator(orientation=Gtk.Orientation.VERTICAL)
+        toolbar.pack_start(separator2, False, False, 0)
+
+        # Frame para estadísticas
+        frame_estadisticas = Gtk.Frame(label="Estadísticas")
+        hbox_estadisticas = Gtk.Box(spacing=6)
+        hbox_estadisticas.set_margin_top(5)
+        hbox_estadisticas.set_margin_bottom(5)
+        hbox_estadisticas.set_margin_start(5)
+        hbox_estadisticas.set_margin_end(5)
+
+        btn_estadisticas = Gtk.Button(label="Ver estadísticas")
+        btn_estadisticas.connect("clicked", self.on_estadisticas_clicked)
+        hbox_estadisticas.pack_start(btn_estadisticas, False, False, 0)
+
+        frame_estadisticas.add(hbox_estadisticas)
+        toolbar.pack_start(frame_estadisticas, False, False, 0)
 
         # TreeView con scroll
         scrolled = Gtk.ScrolledWindow()
@@ -318,6 +338,19 @@ class MainWindow(Gtk.Window):
             widget (Gtk.Widget): La ventana que se cerró.
         """
         self.cargar_juegos()
+
+    def on_estadisticas_clicked(self, widget):
+        """
+        Abre la ventana de estadísticas.
+
+        Muestra una ventana modal con estadísticas de plataformas y
+        desarrolladores incluyendo el conteo de juegos y nota media.
+
+        Args:
+            widget (Gtk.Widget): El botón que activó esta acción.
+        """
+        estadisticas_window = EstadisticasWindow(self)
+        estadisticas_window.show_all()
 
     def _mostrar_mensaje(self, titulo, mensaje, tipo):
         """
