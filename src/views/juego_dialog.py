@@ -1,4 +1,16 @@
-# views/juego_dialog.py
+"""
+Módulo de diálogo para crear y editar juegos.
+
+Proporciona la clase JuegoDialog que presenta una interfaz para que el usuario
+pueda ingresar información de un videojuego, incluyendo título, plataforma,
+desarrollador, fecha de juego, valoración y género.
+
+Características:
+- Validación de campos obligatorios
+- Autocompletado de plataformas y desarrolladores
+- Carga dinámica de sugerencias desde JSON
+- Feedback visual en tiempo real
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -7,8 +19,34 @@ from models import Juego, Genero
 
 class JuegoDialog(Gtk.Dialog):
     """
-    Diálogo para crear o editar un juego.
-    Contiene todos los campos necesarios con los controles variados.
+    Diálogo para crear o editar un videojuego.
+
+    Proporciona una interfaz completa para ingresar datos de un juego:
+    - Información básica (título y género obligatorios)
+    - Información editorial (plataforma, desarrollador con autocompletado)
+    - Fecha de juego (mes y año)
+    - Valoración (escala 1-10)
+
+    El diálogo puede ser usado para crear un nuevo juego o editar uno existente.
+    Si se pasa un juego en el constructor, se rellena automáticamente.
+
+    Attributes:
+        juego (Juego or None): Objeto del juego a editar (None si es nuevo).
+        entry_titulo (Gtk.Entry): Campo de entrada para el título.
+        combo_genero (Gtk.ComboBox): Selector de género.
+        entry_plataforma (Gtk.Entry): Campo de entrada de plataforma con autocompletado.
+        entry_desarrollador (Gtk.Entry): Campo de entrada de desarrollador con autocompletado.
+        spin_mes (Gtk.SpinButton): Selector de mes (1-12).
+        spin_año (Gtk.SpinButton): Selector de año (1980-2100).
+        scale_valoracion (Gtk.Scale): Escala de valoración (1-10).
+        plataformas_model (Gtk.ListStore): Modelo para autocompletado de plataformas.
+        desarrolladores_model (Gtk.ListStore): Modelo para autocompletado de desarrolladores.
+
+    Example:
+        >>> dialog = JuegoDialog(parent_window)
+        >>> if dialog.run() == Gtk.ResponseType.OK:
+        ...     juego = dialog.crear_juego_desde_dialogo()
+        ...     juego.save()
     """
 
     def __init__(self, parent, juego=None):
