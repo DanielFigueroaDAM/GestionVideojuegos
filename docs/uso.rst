@@ -28,11 +28,215 @@ La ventana principal se divide en:
 1. **Barra de herramientas** (superior)
    - Frame "Gestión de Juegos" con botones: Nuevo, Editar, Eliminar
    - Frame "Gestión de Géneros" con botón: Gestionar géneros
+   - Frame "Estadísticas" con botón: Ver estadísticas
 
-2. **Tabla de Juegos** (principal)
-   - Muestra todos los videojuegos en tu colección
+2. **Frame de búsqueda** (segunda fila)
+   - **Buscar por**: ComboBox para elegir en qué columna filtrar
+   - **Campo de búsqueda**: Cuadro de texto para escribir lo que buscas
+   - **Botón Limpiar**: Para resetear la búsqueda y ver todos los juegos
+
+3. **Tabla de Juegos** (principal)
+   - Muestra todos los videojuegos en tu colección (filtrados según búsqueda)
    - Columnas: Título, Plataforma, Desarrollador, Fecha, Valoración, Género
    - Las columnas se pueden ordenar haciendo clic en el encabezado
+
+Búsqueda y Filtrado de Juegos
+==============================
+
+¿Para qué sirve el Buscador?
+----------------------------
+
+El **buscador** te permite encontrar rápidamente juegos en tu colección sin tener que ver la lista completa:
+
+- **Buscar por título**: Escribe el nombre del juego y aparecerá en la tabla
+- **Buscar por plataforma**: Encuentra todos tus juegos de PlayStation, Xbox, Switch, etc.
+- **Buscar por desarrollador**: Localiza juegos de un estudio específico
+- **Buscar por género**: Filtra según el tipo de juego (Acción, RPG, Aventura, etc.)
+
+Cómo Usar el Buscador
+---------------------
+
+**Paso 1: Elegir por qué filtrar**
+   1. Abre el combo desplegable **"Buscar por:"**
+   2. Selecciona una de las opciones:
+      - **Título**: Buscar por nombre del juego
+      - **Plataforma**: Buscar por consola o sistema
+      - **Desarrollador**: Buscar por estudio creador
+      - **Género**: Buscar por tipo de juego
+
+**Paso 2: Escribir el término de búsqueda**
+   1. Haz clic en el campo de texto **"Escribe para buscar..."**
+   2. Escribe el texto que deseas buscar
+   3. La tabla se actualiza automáticamente mientras escribes
+   4. Solo aparecen los juegos que contienen el texto en la columna seleccionada
+
+**Paso 3: Ver resultados**
+   - Los juegos que coinciden aparecen en la tabla
+   - Puedes seleccionar, editar o eliminar cualquier resultado
+
+**Paso 4: Limpiar búsqueda (opcional)**
+   1. Haz clic en el botón **"Limpiar"**
+   2. Se borra el texto de búsqueda
+   3. Se restaura la vista para mostrar todos los juegos
+   4. Se resetea el filtro a "Título"
+
+Ejemplos Prácticos de Búsqueda
+------------------------------
+
+**Caso 1: Buscar un juego específico**
+
+   1. Selecciona **"Título"** en el combo
+   2. Escribe "Dark Souls"
+   3. Aparecen todos los juegos con "Dark Souls" en el nombre
+   4. Resultado: "Dark Souls", "Dark Souls 2", "Dark Souls 3"
+
+**Caso 2: Ver todos los juegos de una plataforma**
+
+   1. Selecciona **"Plataforma"** en el combo
+   2. Escribe "PlayStation 5"
+   3. Aparecen todos tus juegos de PS5
+   4. Puedes ver cuántos tienes y sus valoraciones
+
+**Caso 3: Encontrar juegos de un desarrollador**
+
+   1. Selecciona **"Desarrollador"** en el combo
+   2. Escribe "Nintendo"
+   3. Aparecen todos los juegos desarrollados por Nintendo
+   4. Sirve para seguimiento de tu estudio favorito
+
+**Caso 4: Filtrar por género**
+
+   1. Selecciona **"Género"** en el combo
+   2. Escribe "RPG"
+   3. Aparecen todos tus juegos de rol
+   4. Puedes ver tu colección de un género específico
+
+Búsqueda Avanzada: Combinando Ordenamiento y Búsqueda
+-------------------------------------------------------
+
+El buscador funciona perfectamente con el ordenamiento por columnas:
+
+1. **Busca por género**: Escribe "Acción"
+2. **Ordena por valoración**: Haz clic en la columna "Valoración"
+3. **Resultado**: Ves todos tus juegos de acción ordenados por puntuación
+
+Esto te permite:
+   - Ver tus mejores juegos de un género
+   - Encontrar juegos específicos ordenados por fecha
+   - Analizar tendencias en tu colección filtrada
+
+Consejos de Búsqueda
+--------------------
+
+**La búsqueda es case-insensitive**
+   - Puedes escribir "playstation", "PLAYSTATION" o "PlayStation"
+   - El resultado es el mismo
+
+**Búsqueda parcial**
+   - Si escribes "play", encontrará "PlayStation", "Gameplay", etc.
+   - Útil si no recuerdas el nombre exacto
+
+**Búsqueda vacía = Ver todo**
+   - Si dejas el campo en blanco, verás todos los juegos
+   - Presionar "Limpiar" es lo mismo que borrar manualmente
+
+**Usa el combo para ser específico**
+   - Si buscas "2K" en "Desarrollador", solo ve estudios con ese nombre
+   - Si buscas "2K" en "Título", verás juegos como "NBA 2K24"
+
+Estadísticas - Análisis de tu Colección
+========================================
+
+¿Para qué sirven las Estadísticas?
+-----------------------------------
+
+Las **Estadísticas** te permiten analizar y visualizar información sobre tu colección de videojuegos:
+
+- **Ver tendencias**: Qué plataformas tienes más juegos
+- **Valoraciones promedio**: Cuál es tu plataforma favorita según puntuaciones
+- **Análisis de desarrolladores**: Qué estudios tienen tus mejores juegos
+- **Tomar decisiones**: Información para futuras compras
+
+Acceso Rápido
+-------------
+
+1. En la ventana principal, haz clic en el botón **"Estadísticas"** (arriba a la derecha)
+2. Se abrirá una nueva ventana con dos pestañas de análisis
+
+Información por Plataforma
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Esta pestaña muestra para cada plataforma de juego:
+
+- **Plataforma**: Nombre del sistema (PlayStation 5, PC, Nintendo Switch, etc.)
+- **Juegos**: Cantidad total de juegos que tienes en esa plataforma
+- **Nota Media**: Promedio de valoraciones de todos los juegos en esa plataforma (escala 1-10)
+
+**Ordenado de mejor a peor** según la nota media.
+
+**Ejemplo práctico:**
+   Si tienes 8 juegos de PS5 con valoraciones 8, 9, 9, 8, 7, 8, 9, 8
+   → Nota Media: 8.25/10
+
+Información por Desarrollador
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Esta pestaña muestra para cada desarrollador:
+
+- **Desarrollador**: Nombre del estudio (Nintendo, FromSoftware, Capcom, etc.)
+- **Juegos**: Cantidad total de juegos de ese desarrollador en tu colección
+- **Nota Media**: Promedio de valoraciones de todos sus juegos
+
+**También ordenado de mejor a peor** según nota media.
+
+**Ejemplo práctico:**
+   Si tienes 3 juegos de FromSoftware con valoraciones 9, 8, 9
+   → Nota Media: 8.67/10
+
+Cómo Usar las Estadísticas
+---------------------------
+
+**Paso 1: Recopilar datos**
+   - Registra tus juegos con título, plataforma y valoración
+   - Las estadísticas usan estos datos
+
+**Paso 2: Abrir estadísticas**
+   - Haz clic en el botón **"Estadísticas"** en la ventana principal
+   - Se abre la ventana con dos pestañas
+
+**Paso 3: Analizar información**
+   - Mira qué plataformas tienes más completadas
+   - Identifica qué desarrolladores te gustan más
+   - Compara notas medias entre plataformas
+
+**Paso 4: Actualizar (opcional)**
+   - Si agregaste nuevos juegos, haz clic en **"Actualizar Estadísticas"**
+   - La información se recalcula automáticamente
+
+Casos de Uso Reales
+-------------------
+
+**Decidir qué consola comprar:**
+
+- Mira qué plataforma tiene más juegos que quieres
+- Revisa la nota media (refleja qué te gusta)
+- Si Nintendo Switch tiene 9.2/10, probablemente te encantan esos juegos
+
+**Seguimiento de estudios:**
+
+- Ve qué desarrolladores tienes en tu colección
+- Si FromSoftware tiene 8.5/10 promedio, sabes que sus juegos te encantan
+- Mantente atento a próximos lanzamientos de ese estudio
+
+**Organizar presupuesto:**
+
+- Ve cuántos juegos tienes por plataforma
+- Si PS5 tiene 25 juegos pero Switch solo 3, quizá es momento de enfocarte en Switch
+
+**Revisar tu progreso:**
+
+- La cantidad de juegos muestra cuánto has avanzado en tu colección
+- Las notas medias reflejan cómo ha evolucionado tu gusto
 
 Gestión de Videojuegos
 ======================
@@ -104,6 +308,9 @@ Crear un Nuevo Género
 3. El nombre debe tener al menos 3 caracteres
 4. Verás feedback visual (ícono) mientras escribes
 5. Haz clic en **"OK"** para guardar
+6. (**Opcional**)Para hacer un genero compuesto, selecciona varias opciones en el panel de "Crear Género Compuesto"
+7. Haz clic en Concatenar los generos seleccionados
+8. Los paneles se rellenarán con el nombre y descripción concatenados(Pueden ser editados antes de guardar)
 
 Editar un Género
 ----------------
@@ -264,48 +471,19 @@ Ejemplo Práctico
 Visualización de Estadísticas
 ==============================
 
-Abrir Estadísticas
--------------------
+Para más detalles sobre cómo usar las estadísticas, consulta la sección **"Estadísticas - Análisis de tu Colección"** que se encuentra arriba después de la Interfaz Principal.
 
-1. En la ventana principal, haz clic en **"Estadísticas"**
-2. Se abrirá la ventana "Estadísticas" con dos tabs
+Allí encontrarás:
 
-Tab de Plataformas
-~~~~~~~~~~~~~~~~~~~
+   - Explicación completa de para qué sirven las estadísticas
+   - Cómo acceder y usar cada pestaña
+   - Ejemplos prácticos de análisis
+   - Casos de uso reales
 
-Muestra para cada plataforma:
+Actualizar Estadísticas Manualmente
+-----------------------------------
 
-- **Plataforma**: Nombre del sistema
-- **Juegos**: Cantidad total de juegos
-- **Nota Media**: Promedio de valoraciones
-
-**Ordenado por nota media** (de mayor a menor).
-
-**Ejemplo:**
-   - PlayStation 5: 8 juegos, 8.5/10
-   - PC: 15 juegos, 7.8/10
-   - Nintendo Switch: 5 juegos, 9.0/10
-
-Tab de Desarrolladores
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Muestra para cada desarrollador:
-
-- **Desarrollador**: Nombre del estudio
-- **Juegos**: Cantidad total de juegos
-- **Nota Media**: Promedio de valoraciones
-
-También **ordenado por nota media** (mayor a menor).
-
-**Ejemplo:**
-   - Nintendo: 6 juegos, 9.0/10
-   - FromSoftware: 3 juegos, 8.7/10
-   - Capcom: 4 juegos, 8.0/10
-
-Actualizar Estadísticas
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-1. Haz clic en el botón **"Actualizar Estadísticas"** en la ventana
+1. En la ventana de Estadísticas, haz clic en el botón **"Actualizar Estadísticas"**
 2. La aplicación recalcula los datos desde la base de datos
 3. Se muestra la versión más reciente
 

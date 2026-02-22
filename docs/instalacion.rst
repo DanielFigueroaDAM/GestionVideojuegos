@@ -21,7 +21,7 @@ Instalación en Linux (Debian/Ubuntu)
 
 2. **Clonar el repositorio**::
 
-    git clone https://github.com/usuario/GestionVideojuegos.git
+    git clone https://github.com/DanielFigueroaDAM/GestionVideojuegos
     cd GestionVideojuegos
 
 3. **Crear un entorno virtual (opcional pero recomendado)**::
@@ -50,7 +50,7 @@ Instalación en Windows
 
 3. **Clonar el repositorio**::
 
-    git clone https://github.com/usuario/GestionVideojuegos.git
+    git clone https://github.com/DanielFigueroaDAM/GestionVideojuegos
     cd GestionVideojuegos
 
 4. **Crear un entorno virtual**::
@@ -79,7 +79,7 @@ Instalación en macOS
 
 3. **Clonar el repositorio**::
 
-    git clone https://github.com/usuario/GestionVideojuegos.git
+    git clone https://github.com/DanielFigueroaDAM/GestionVideojuegos
     cd GestionVideojuegos
 
 4. **Crear un entorno virtual**::

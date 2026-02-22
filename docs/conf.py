@@ -109,7 +109,7 @@ texinfo_documents = [
 ]
 
 # Intersphinx mapping
-intersphinx_mapping = {'https://docs.python.org/3': None}
+intersphinx_mapping = {'https://docs.python.org/3': ('https://docs.python.org/3', None)}
 
 # Todos extension
 todo_include_todos = True

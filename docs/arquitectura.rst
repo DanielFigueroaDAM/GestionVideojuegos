@@ -113,16 +113,29 @@ Interfaz Gráfica (vistas)
 
    Componentes:
    - TreeView con modelo ListStore para mostrar juegos
+   - Modelo filtrado (TreeModelFilter) para búsqueda y filtrado
    - Botones: Nuevo, Editar, Eliminar
    - Acceso a la ventana de gestión de géneros
+   - Frame de búsqueda: ComboBox de columnas, SearchEntry, botón Limpiar
    - Actualización dinámica de la tabla
 
    Métodos principales:
-   - ``_init_ui()``: Construye la interfaz
+   - ``_init_ui()``: Construye la interfaz incluyendo el buscador
    - ``cargar_juegos()``: Carga y muestra los juegos
+   - ``_filtro_busqueda()``: Filtra filas según texto y columna seleccionada
+   - ``on_busqueda_changed()``: Actualiza filtro cuando cambia el texto
+   - ``on_filtro_changed()``: Actualiza en qué columna buscar
+   - ``on_limpiar_busqueda()``: Limpia el filtro
    - ``on_nuevo_clicked()``: Abre diálogo para nuevo juego
    - ``on_editar_clicked()``: Abre diálogo para editar
    - ``on_eliminar_clicked()``: Elimina con confirmación
+
+   Implementación del Filtrado:
+   - Se usa ``Gtk.TreeModelFilter`` que envuelve el ``Gtk.ListStore``
+   - La función ``_filtro_busqueda()`` define la lógica de visibilidad
+   - Soporta búsqueda en: Título (1), Plataforma (2), Desarrollador (3), Género (6)
+   - La búsqueda es case-insensitive mediante ``.lower()``
+   - Se utiliza búsqueda parcial con el operador ``in``
 
 **JuegoDialog** (juego_dialog.py)
    Diálogo modal para crear/editar juegos.

@@ -19,16 +19,21 @@ class MainWindow(Gtk.Window):
     """
     Ventana principal de la aplicación.
 
-    Muestra la lista de juegos en un TreeView con capacidad de ordenamiento
-    y proporciona botones para añadir, editar y eliminar juegos, así como
-    para gestionar géneros.
+    Muestra la lista de juegos en un TreeView con capacidad de ordenamiento,
+    filtrado por búsqueda y proporciona botones para añadir, editar y eliminar
+    juegos, así como para gestionar géneros.
 
     Attributes:
         store (Gtk.ListStore): Modelo de datos para el TreeView.
+        store_filtrado (Gtk.TreeModelFilter): Modelo filtrado para búsquedas.
         treeview (Gtk.TreeView): Widget para mostrar la tabla de juegos.
         selection (Gtk.TreeSelection): Selector de filas.
         btn_editar (Gtk.Button): Botón para editar juego.
         btn_eliminar (Gtk.Button): Botón para eliminar juego.
+        combo_filtro (Gtk.ComboBoxText): Selector de columna para búsqueda.
+        entry_busqueda (Gtk.SearchEntry): Campo de entrada para búsqueda.
+        busqueda_texto (str): Texto actual de búsqueda.
+        busqueda_columna (int): ID de la columna en que buscar (1-6).
     """
 
     def __init__(self):
@@ -38,6 +43,14 @@ class MainWindow(Gtk.Window):
 
         # Crear modelo de datos para el TreeView (ListStore)
         self.store = Gtk.ListStore(int, str, str, str, str, int, str)  # id, título, plataforma, desarrollador, fecha, valoración, género
+
+        # Crear modelo filtrado para el búsqueda
+        self.store_filtrado = self.store.filter_new()
+        self.store_filtrado.set_visible_func(self._filtro_busqueda, None)
+
+        # Variables para el filtro
+        self.busqueda_texto = ""
+        self.busqueda_columna = 1  # Por defecto buscar en título (1)
 
         # Crear la interfaz
         self._init_ui()
@@ -52,7 +65,9 @@ class MainWindow(Gtk.Window):
         Crea la estructura de widgets incluyendo:
         - Frame de gestión de juegos (botones Nuevo, Editar, Eliminar)
         - Frame de gestión de géneros
-        - TreeView con scroll para mostrar la lista de juegos
+        - Frame de estadísticas (botón Ver estadísticas)
+        - Frame de búsqueda (ComboBox de columnas, SearchEntry, botón Limpiar)
+        - TreeView con scroll para mostrar la lista de juegos filtrada
         - Columnas con renderers de texto
         """
         # Caja vertical principal
@@ -127,12 +142,45 @@ class MainWindow(Gtk.Window):
         frame_estadisticas.add(hbox_estadisticas)
         toolbar.pack_start(frame_estadisticas, False, False, 0)
 
+        # Buscador
+        frame_busqueda = Gtk.Frame(label="Buscar")
+        hbox_busqueda = Gtk.Box(spacing=6)
+        hbox_busqueda.set_margin_top(5)
+        hbox_busqueda.set_margin_bottom(5)
+        hbox_busqueda.set_margin_start(5)
+        hbox_busqueda.set_margin_end(5)
+
+        # ComboBox para seleccionar en qué columna buscar
+        self.combo_filtro = Gtk.ComboBoxText()
+        self.combo_filtro.append("1", "Título")
+        self.combo_filtro.append("2", "Plataforma")
+        self.combo_filtro.append("3", "Desarrollador")
+        self.combo_filtro.append("6", "Género")
+        self.combo_filtro.set_active_id("1")
+        self.combo_filtro.connect("changed", self.on_filtro_changed)
+        hbox_busqueda.pack_start(Gtk.Label(label="Buscar por:"), False, False, 0)
+        hbox_busqueda.pack_start(self.combo_filtro, False, False, 0)
+
+        # Entry para la búsqueda
+        self.entry_busqueda = Gtk.SearchEntry()
+        self.entry_busqueda.set_placeholder_text("Escribe para buscar...")
+        self.entry_busqueda.connect("search-changed", self.on_busqueda_changed)
+        hbox_busqueda.pack_start(self.entry_busqueda, True, True, 0)
+
+        # Botón para limpiar búsqueda
+        btn_limpiar = Gtk.Button(label="Limpiar")
+        btn_limpiar.connect("clicked", self.on_limpiar_busqueda)
+        hbox_busqueda.pack_start(btn_limpiar, False, False, 0)
+
+        frame_busqueda.add(hbox_busqueda)
+        vbox.pack_start(frame_busqueda, False, False, 0)
+
         # TreeView con scroll
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         vbox.pack_start(scrolled, True, True, 0)
 
-        self.treeview = Gtk.TreeView(model=self.store)
+        self.treeview = Gtk.TreeView(model=self.store_filtrado)
         scrolled.add(self.treeview)
 
         # Definir columnas
@@ -209,6 +257,76 @@ class MainWindow(Gtk.Window):
             self.store.append([juego.id, juego.titulo, juego.plataforma,
                                juego.desarrollador, fecha, juego.valoracion or 0,
                                genero_nombre])
+        # Refrescar el filtro para mostrar todos los juegos cargados
+        self.store_filtrado.refilter()
+
+    def _filtro_busqueda(self, model, treeiter, user_data):
+        """
+        Función de filtrado para el búsqueda de juegos.
+
+        Determina si una fila debe ser visible según el texto de búsqueda
+        y la columna seleccionada. La búsqueda es case-insensitive.
+
+        Args:
+            model (Gtk.TreeModel): Modelo de datos.
+            treeiter (Gtk.TreeIter): Iterador de la fila a evaluar.
+            user_data: Datos adicionales (no utilizado).
+
+        Returns:
+            bool: True si la fila debe ser visible, False si debe ocultarse.
+        """
+        if not self.busqueda_texto:
+            return True
+
+        try:
+            columna = int(self.busqueda_columna)
+            valor = model[treeiter][columna]
+            valor_str = str(valor).lower()
+            return self.busqueda_texto.lower() in valor_str
+        except (IndexError, ValueError):
+            return True
+
+    def on_busqueda_changed(self, widget):
+        """
+        Actualiza el filtro cuando cambia el texto de búsqueda.
+
+        Se ejecuta cada vez que el usuario escribe en el campo de búsqueda.
+        Actualiza la variable de búsqueda y refiltra la tabla.
+
+        Args:
+            widget (Gtk.SearchEntry): El campo de búsqueda que cambió.
+        """
+        self.busqueda_texto = widget.get_text()
+        self.store_filtrado.refilter()
+
+    def on_filtro_changed(self, widget):
+        """
+        Actualiza el filtro cuando cambia la columna de búsqueda.
+
+        Se ejecuta cuando el usuario cambia el ComboBox de columnas.
+        Actualiza en qué columna buscar y refiltra la tabla.
+
+        Args:
+            widget (Gtk.ComboBoxText): El ComboBox que cambió.
+        """
+        self.busqueda_columna = widget.get_active_id()
+        self.store_filtrado.refilter()
+
+    def on_limpiar_busqueda(self, widget):
+        """
+        Limpia el filtro de búsqueda y muestra todos los juegos.
+
+        Se ejecuta al hacer clic en el botón "Limpiar".
+        Borra el texto de búsqueda y restaura la vista a mostrar todos los juegos.
+
+        Args:
+            widget (Gtk.Button): El botón que fue presionado.
+        """
+        self.entry_busqueda.set_text("")
+        self.busqueda_texto = ""
+        self.combo_filtro.set_active_id("1")
+        self.busqueda_columna = 1
+        self.store_filtrado.refilter()
 
     def on_selection_changed(self, selection):
         """
