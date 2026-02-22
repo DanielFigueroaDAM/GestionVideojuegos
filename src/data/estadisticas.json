@@ -1,0 +1,106 @@
+{
+    "plataformas": {
+        "PC": {
+            "nombre": "PC",
+            "juegos_totales": 8,
+            "nota_media": 7.5
+        },
+        "Play 2": {
+            "nombre": "Play 2",
+            "juegos_totales": 5,
+            "nota_media": 7.8
+        },
+        "Play 4": {
+            "nombre": "Play 4",
+            "juegos_totales": 9,
+            "nota_media": 8.33
+        },
+        "Nintendo DSI": {
+            "nombre": "Nintendo DSI",
+            "juegos_totales": 2,
+            "nota_media": 8.5
+        },
+        "Play 3": {
+            "nombre": "Play 3",
+            "juegos_totales": 2,
+            "nota_media": 9.0
+        },
+        "Android": {
+            "nombre": "Android",
+            "juegos_totales": 1,
+            "nota_media": 7.0
+        }
+    },
+    "desarrolladores": {
+        "nicalis": {
+            "nombre": "Nicalis",
+            "juegos_totales": 1,
+            "nota_media": 8.0
+        },
+        "sandbox interactive": {
+            "nombre": "Sandbox Interactive",
+            "juegos_totales": 1,
+            "nota_media": 4.0
+        },
+        "traveller's tales": {
+            "nombre": "Traveller's Tales",
+            "juegos_totales": 1,
+            "nota_media": 9.0
+        },
+        "vicarious visions": {
+            "nombre": "Vicarious Visions",
+            "juegos_totales": 1,
+            "nota_media": 9.0
+        },
+        "techland": {
+            "nombre": "Techland",
+            "juegos_totales": 4,
+            "nota_media": 9.25
+        },
+        "deep silver": {
+            "nombre": "Deep Silver",
+            "juegos_totales": 1,
+            "nota_media": 7.0
+        },
+        "tose": {
+            "nombre": "Tose",
+            "juegos_totales": 1,
+            "nota_media": 9.0
+        },
+        "dave crooks": {
+            "nombre": "Dave Crooks",
+            "juegos_totales": 1,
+            "nota_media": 7.0
+        },
+        "dodge roll": {
+            "nombre": "Dodge Roll",
+            "juegos_totales": 1,
+            "nota_media": 7.0
+        },
+        "rockstar games": {
+            "nombre": "RockStar Games",
+            "juegos_totales": 6,
+            "nota_media": 7.83
+        },
+        "naughtydog": {
+            "nombre": "NaughtyDog",
+            "juegos_totales": 5,
+            "nota_media": 8.0
+        },
+        "mojang": {
+            "nombre": "Mojang",
+            "juegos_totales": 2,
+            "nota_media": 8.5
+        },
+        "cubic games": {
+            "nombre": "Cubic Games",
+            "juegos_totales": 1,
+            "nota_media": 7.0
+        },
+        "nintendo": {
+            "nombre": "Nintendo",
+            "juegos_totales": 1,
+            "nota_media": 8.0
+        }
+    }
+}
