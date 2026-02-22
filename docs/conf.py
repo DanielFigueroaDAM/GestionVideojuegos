@@ -30,6 +30,14 @@ extensions = [
 autodoc_member_order = 'bysource'
 autodoc_typehints = 'description'
 add_module_names = True
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': False,
+    'private-members': False,
+    'exclude-members': '__dict__,__module__,__weakref__,__doc__,__annotations__'
+}
 
 # Napoleon options for Google/NumPy style docstrings
 napoleon_google_docstring = True
